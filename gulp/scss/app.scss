@@ -1,0 +1,93 @@
+@import 'foundation';
+@import 'normalize';
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+
+label {
+    color: #000;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    margin: 0 0 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+input[type='text'], input[type='email'] {
+    display: block;
+    width: 100%;
+}
+
+input[type='password'] {
+    flex-grow: 1;
+    margin: 0 10px 0 0;
+    min-width: auto;
+}
+
+button {
+    background-color: #000;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px;
+    flex-shrink: 0;
+    font-weight: bold;
+}
+
+form span {
+    display: flex;
+}
+
+header, footer {
+    background-color: #222;
+    width: 100%;
+    color: #fff;
+    position: fixed;
+    z-index: 1;
+    padding: 10px 0;
+}
+
+footer {
+    background: #000;
+    bottom: 0;
+}
+
+header .navigation {
+    display: flex;
+    justify-content: space-between;
+}
+
+header img {
+    max-height: 40px;
+}
+
+.front-page {
+    background-image: url('../img/concert.jpg');
+    background-position: center;
+    background-size: cover;
+    padding: 60px 0;
+    color: #fff;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+}
+
+.sign-in, .register {
+    background-color: #fefefe;
+    border-radius: 5px;
+    padding: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.register {
+    margin-top: 20px;
+}
+

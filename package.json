@@ -1,17 +1,29 @@
 {
-  "name": "myapp",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "start": "node ./bin/www"
-  },
-  "dependencies": {
-    "body-parser": "~1.15.2",
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.2.0",
-    "express": "~4.14.0",
-    "morgan": "~1.7.0",
-    "pug": "~2.0.0-beta6",
-    "serve-favicon": "~2.3.0"
-  }
+    "name": "melodacious",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "start": "node ./bin/www"
+    },
+    "devDependencies": {
+        "browser-sync": "^2.10.0",
+        "gulp": "^3.9.0",
+        "gulp-cache": "^0.4.1",
+        "gulp-concat": "^2.6.0",
+        "gulp-load-plugins": "^1.1.0",
+        "gulp-notify": "^2.2.0",
+        "gulp-rename": "^1.2.2",
+        "gulp-sass": "^2.1.0",
+        "gulp-uglify": "^1.5.1",
+        "gulp-autoprefixer": "^3.1.0"
+    },
+    "dependencies": {
+        "body-parser": "~1.15.2",
+        "cookie-parser": "~1.4.3",
+        "debug": "~2.2.0",
+        "express": "~4.14.0",
+        "morgan": "~1.7.0",
+        "pug": "~2.0.0-beta6",
+        "serve-favicon": "~2.3.0"
+    }
 }

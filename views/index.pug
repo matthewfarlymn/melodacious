@@ -1,5 +1,23 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    main.front-page
+        section
+            div.row
+                div.small-12.medium-6.columns
+                    h1 Welcome to Melodacious
+                    p Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive innovation via workplace diversity and empowerment.
+                div.small-12.medium-6.columns
+                    form(method='POST' action='/sign-in').small-12.columns.sign-in
+                        input(type='text', placeholder='Email', name='email')
+                        span
+                            input(type='password', placeholder='********', name='password')
+                            button(type='submit') Sign-in
+                    form(method='POST' action='/register').small-12.columns.register
+                        label New to Melodacious? Register now
+                        input(type='text', placeholder='First Name', name='firstname')
+                        input(type='text', placeholder='Last Name', name='lastname')
+                        input(type='email', placeholder='Email', name='email')
+                        span
+                            input(type='password', placeholder='********', name='password')
+                            button(type='submit') Register

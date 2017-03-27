@@ -1,7 +1,21 @@
 doctype html
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+    head
+        title= title
+        link(rel='stylesheet', href='/css/app.css')
+    body
+        block header
+            header
+                div.row
+                    div.small-12.columns.navigation
+                        img(src='/img/logo.svg')
+                        nav
+                            ul
+                                li 
+                                li
+                                li
+        block content
+        block footer
+            footer
+                div.row
+                    h1 Footer
