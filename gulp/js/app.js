@@ -5,7 +5,7 @@ jQuery(document).ready(function($) {
     function setHeight() {
         headerHeight = $('header').outerHeight();
         $('main').css({
-            'top': headerHeight
+            'padding-top': headerHeight
         });
     }
 
