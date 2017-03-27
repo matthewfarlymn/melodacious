@@ -3,19 +3,26 @@ html
     head
         title= title
         link(rel='stylesheet', href='/css/app.css')
+        script(type='text/javascript', src='/js/vendor.min.js')
+        script(type='text/javascript', src='/js/app.min.js')
     body
         block header
             header
                 div.row
                     div.small-12.columns.navigation
-                        img(src='/img/logo.svg')
+                        a(href='/')
+                            img(src='/img/logo.svg')
                         nav
                             ul
-                                li 
-                                li
-                                li
+                                if loggedIn
+                                    li 
+                                        a(href='#') My Playlists
+                                    li
+                                        a(class='sign-out' href='#') Sign-out
         block content
         block footer
             footer
                 div.row
-                    h1 Footer
+                    div.small-12.columns
+                        span.fa.fa-copyright
+                        span #{moment(Date.now()).format('YYYY')} Melodacious

@@ -4,6 +4,7 @@ var browserSync = require('browser-sync').create();
 
 var paths = {
 	src: {
+        pug: 'views/*.pug',
 		js: 'gulp/js/*.js',
 		vendor: 'gulp/js/vendor/**/*.js',
 		scss: 'gulp/scss/app.scss',
@@ -61,7 +62,7 @@ gulp.task('clearCache', function(done) {
 });
 
 gulp.task('watch', function(){
-    gulp.watch( paths.src.php, ['browser-reload']);
+    gulp.watch( paths.src.pug, ['browser-reload']);
 	gulp.watch( paths.src.scssWatch, ['sass']);
 	gulp.watch( paths.src.js, ['js']);
 	gulp.watch( paths.src.vendor, ['vendor']);
