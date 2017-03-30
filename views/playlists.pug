@@ -1,0 +1,26 @@
+extends layout
+
+block content
+    main
+        section.hero
+            div.row
+                div.small-12.medium-7.large-8.columns
+                    h1 Welcome #{firstName}
+                    p Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive innovation via workplace diversity and empowerment.
+                div.small-12.medium-5.large-4.columns
+                    form(method='POST' action='/user/create-playlist').small-12.columns.create
+                        if createError !== ""
+                            label.error #{createError}
+                        else
+                            label Create a new playlist.
+                        input(type='text', placeholder='Title', name='title', required)
+                        textarea(type='text', placeholder='Description', name='description')
+                        button(type='submit') Create
+        section.playlists
+            div.row
+                each playlist in playlists
+                    div.small-12.medium-4.large-3.columns
+                        a(href='/user/playlists/' + playlist.id + '/' + playlist.title) 
+                            div.playlist
+                                div.overlay
+                                    span #{playlist.title}

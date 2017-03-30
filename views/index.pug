@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    main.front-page
+    main.cover
         section
             div.row
                 div.small-12.medium-7.large-8.columns.welcome
@@ -9,16 +9,23 @@ block content
                     p Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive innovation via workplace diversity and empowerment.
                 div.small-12.medium-5.large-4.columns
                     form(method='POST' action='/sign-in').small-12.columns.sign-in
-                        input(type='email', placeholder='Email', name='email')
+                        if signInError !== ""
+                            label.error #{signInError}
+                        else
+                            label Sign-in and start listening!
+                        input(type='email', placeholder='Email', name='email', required)
                         span.flex
-                            input(type='password', placeholder='********', name='password')
+                            input(type='password', placeholder='********', name='password', required)
                             button(type='submit') Sign-in
                     form(method='POST' action='/register').small-12.columns.register
-                        label New to Melodacious? 
-                            span.register Register now
-                        input(type='text', placeholder='First Name', name='firstname')
-                        input(type='text', placeholder='Last Name', name='lastname')
-                        input(type='email', placeholder='Email', name='email')
+                        if registrationError !== ""
+                            label.error #{registrationError}
+                        else
+                            label New to Melodacious? 
+                                span.register Register now.
+                        input(type='text', placeholder='First Name', name='firstName', required)
+                        input(type='text', placeholder='Last Name', name='lastName', required)
+                        input(type='email', placeholder='Email', name='email', required)
                         span.flex
-                            input(type='password', placeholder='********', name='password')
+                            input(type='password', placeholder='********', name='password', required)
                             button(type='submit') Register

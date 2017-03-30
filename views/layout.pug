@@ -14,11 +14,9 @@ html
                             img(src='/img/logo.svg')
                         nav
                             ul
-                                if loggedIn
-                                    li 
-                                        a(href='#') My Playlists
+                                if access
                                     li
-                                        a(class='sign-out' href='#') Sign-out
+                                        a(class='sign-out' href='/sign-out') Sign-out
         block content
         block footer
             footer

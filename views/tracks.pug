@@ -1,0 +1,34 @@
+extends layout
+
+block content
+    main
+        section.hero
+            div.row
+                div.small-12.medium-7.large-8.columns
+                    h1 #{playlistTitle}
+                    p #{playlistDescription}
+                div.small-12.medium-5.large-4.columns
+                    form(method='POST' action='/user/create-playlist').small-12.columns.create
+                        if createError !== ""
+                            label.error #{createError}
+                        else
+                            label Add a new track.
+                        input(type='text', placeholder='Title', name='title', required)
+                        textarea(type='text', placeholder='Description', name='description')
+                        input(type='text', placeholder='Url', name='url', required)
+                        span.flex    
+                            select(name='service', required)
+                                option(value='' selected='true' disabled='true') -- Select Service --
+                                option(value='soundcloud') SoundCloud
+                                option(value='spotify') Spotify
+                                option(value='other') Other
+                            button(type='submit') Create
+        section.tracks
+            div.row
+                each track in tracks
+                    div.small-12.medium-6.columns 
+                        div.playlist 
+                        p #{track.title}
+                        iframe(src='https://w.soundcloud.com/player/?url=https://soundcloud.com/the-bugle/bugle-4022-not-scared-bored' width='100%' height='115' scrolling='no' frameborder='no')
+                        iframe(src="https://embed.spotify.com/?uri=spotify:user:erebore:playlist:788MOXyTfcUb1tdw4oC7KJ" width='100%' height='80' frameborder="0" allowtransparency="true")
+                        iframe(src="https://embed.spotify.com/?uri=spotify:track:0NrLrAmrSqgH3pA8ejRTt9" width='100%' height='80' frameborder="0" allowtransparency="true")

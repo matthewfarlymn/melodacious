@@ -15,4 +15,8 @@ jQuery(document).ready(function($) {
         setHeight();
     });
 
+    soundcloud.addEventListener('onPlayerReady', function(player, data) {
+        player.api_play();
+    });
+
 });
