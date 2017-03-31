@@ -8,14 +8,15 @@ block content
                     h1 #{playlistTitle}
                     p #{playlistDescription}
                 div.small-12.medium-5.large-4.columns
-                    form(method='POST' action='/user/create-playlist').small-12.columns.create
+                    form(method='POST' action='/user/create-track').small-12.columns.create
                         if createError !== ""
                             label.error #{createError}
                         else
                             label Add a new track.
                         input(type='text', placeholder='Title', name='title', required)
-                        textarea(type='text', placeholder='Description', name='description')
-                        input(type='text', placeholder='Url', name='url', required)
+                        input(type='text', placeholder='Artist', name='artist')
+                        input(type='text', placeholder='Album', name='album')
+                        input(type='url', placeholder='Url', name='url', required)
                         span.flex    
                             select(name='service', required)
                                 option(value='' selected='true' disabled='true') -- Select Service --
@@ -23,12 +24,21 @@ block content
                                 option(value='spotify') Spotify
                                 option(value='other') Other
                             button(type='submit') Create
+                                span.fa.fa-plus-circle
         section.tracks
             div.row
                 each track in tracks
-                    div.small-12.medium-6.columns 
-                        div.playlist 
-                        p #{track.title}
-                        iframe(src='https://w.soundcloud.com/player/?url=https://soundcloud.com/the-bugle/bugle-4022-not-scared-bored' width='100%' height='115' scrolling='no' frameborder='no')
-                        iframe(src="https://embed.spotify.com/?uri=spotify:user:erebore:playlist:788MOXyTfcUb1tdw4oC7KJ" width='100%' height='80' frameborder="0" allowtransparency="true")
-                        iframe(src="https://embed.spotify.com/?uri=spotify:track:0NrLrAmrSqgH3pA8ejRTt9" width='100%' height='80' frameborder="0" allowtransparency="true")
+                    div.small-12.medium-4.large-3.columns 
+                        div.track
+                            p #{track.title}
+                            if track.arist
+                                p #{track.artist}
+                            if track.album
+                                p #{track.album}
+                            if track.service === 'soundcloud'
+                                iframe(src='https://w.soundcloud.com/player/?url=' + track.url width='100%' height='115' scrolling='no' frameborder='no')
+                            else if track.service === 'spotify'
+                                iframe(src='https://embed.spotify.com/?uri=' + track.url width='100%' height='80' frameborder='0' allowtransparency='true')
+                            else
+                                a(href=track.url)
+                            a(href='/user/delete-track/' + track.id) Delete

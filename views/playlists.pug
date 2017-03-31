@@ -15,7 +15,14 @@ block content
                             label Create a new playlist.
                         input(type='text', placeholder='Title', name='title', required)
                         textarea(type='text', placeholder='Description', name='description')
-                        button(type='submit') Create
+                        span.flex
+                            select(name='image', required)
+                                option(value='' selected='true' disabled='true') -- Select Image --
+                                option(value='soundcloud') SoundCloud
+                                option(value='spotify') Spotify
+                                option(value='other') Other
+                            button(type='submit') Create
+                                span.fa.fa-plus-circle
         section.playlists
             div.row
                 each playlist in playlists
