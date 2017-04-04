@@ -2,9 +2,15 @@
 @import 'normalize';
 @import 'font-awesome';
 @import 'mixins';
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
 
 body {
+    font-family: 'Open Sans', sans-serif;
     font-size: 16px;
+}
+
+*:focus {
+    outline: none;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -17,17 +23,45 @@ h1 {
     line-height: 3rem;
 }
 
+h2 {
+    font-size: 28px;
+    line-height: 2rem;
+    margin-top: 10px;
+}
+
+h3 {
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+h4 {
+    font-size: 12px;
+    font-weight: normal;
+    color: #cccccc;
+}
+
 p {
-    margin: 10px 0;
+    margin: 20px 0;
     padding: 0;
     line-height: 1.5rem;
     font-size: 18px;
 }
 
+a {
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.25s ease-in-out;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 header, footer {
     background-color: rgba(0, 0, 0, 0.75);
     width: 100%;
-    color: #fff;
+    color: #ffffff;
     position: fixed;
     z-index: 1;
     padding: 10px 0;
@@ -50,13 +84,16 @@ header, footer {
                         margin: 0;
                     }
                     a {
-                        color: #fff;
+                        color: #ffffff;
                         font-weight: bold;
                         text-decoration: none;
                         &.sign-out {
                             background-color: #6e00fd;
                             padding: 10px 20px;
                             border-radius: 5px;
+                            &:hover {
+                                background-color: #6300e4;
+                            }
                         }
                     }
                 }
@@ -83,17 +120,20 @@ main {
     bottom: 0;
     left: 0;
     overflow: auto;
-    padding-top: 60px;
+    background-color: #ffffff;
     &.cover {
-        background-image: url('../img/concert.jpg');
+        background-image: linear-gradient(rgba(77, 0, 177, 0.50), rgba(255, 255, 255, 0.25)), url('../img/concert.jpg');
         background-position: center;
         background-size: cover;
-        color: #fff;
+        color: #ffffff;
     }
 }
 
 section {
     padding: 60px 0;
+    &:first-of-type {
+        padding-top: 120px;
+    }
     &.hero {
         background-color: #f6f6f6;
     }
@@ -105,13 +145,13 @@ section {
 
 form {
     label {
-        color: #000;
+        color: #000000;
         display: block;
         margin-bottom: 10px;
         line-height: 1rem;
         font-size: 14px;
         &.error {
-            color: #ff9494;
+            color: #ff4040;
             font-weight: bold;
         }
     }
@@ -119,26 +159,28 @@ form {
         margin: 0 0 10px 0;
         padding: 10px;
         border-radius: 5px;
-        border: 1px solid #ccc;
-        background-color: #fff;
+        border: 1px solid #cccccc;
+        background-color: #ffffff;
     }
     input[type='text'], input[type='email'], textarea, input[type='url'] {
         display: block;
         width: 100%;
         resize: none;
     }
-    input[type='password'], select {
+    input[type='password'], select, input[type='url'] {
         flex-grow: 1;
         margin: 0 10px 0 0;
         min-width: 0;
     }
     button {
-        color: #fff;
+        color: #ffffff;
         border-radius: 5px;
         padding: 10px 20px;
         flex-shrink: 0;
         font-weight: bold;
         display: flex;
+        cursor: pointer;
+        transition: all 0.25s ease-in-out;
         span {
             margin-left: 5px;
         }
@@ -147,33 +189,49 @@ form {
         &.flex {
             display: flex;
         }
-        &.register {
-            color: #2900fe;
-        }
     }
-    &.sign-in, &.register, &.create {
+    &.sign-in, &.register, &.create, &.update {
         background-color: #fefefe;
         border-radius: 5px;
         padding: 12px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     }
-    &.sign-in, &.create {
-        @include breakpoint(small) {
-            margin-top: 20px;
-        }
+    &.sign-in {
         button {
             background-color: #6e00fd;
+            &:hover {
+                background-color: #6300e4;
+            }
+        }
+    }
+    &.register, &.create {
+        button {
+            background-color: #2900fe;
+            &:hover {
+                background-color: #2500e5;
+            }
+        }
+    }
+    &.update {
+        button {
+            background-color: #76c000;
+            &:hover {
+                background-color: #66a700;
+            }
+        }
+    }
+    &.sign-in, &.create, &.update {
+        @include breakpoint(small) {
+            margin-top: 20px;
         }
     }
     &.register {
         margin-top: 20px;
-        button {
-            background-color: #2900fe;
-        }
     }
 }
 
-.playlists {
+.playlists, .tracks {
+    background-color: #ffffff;
     .columns {
         &:last-of-type {
             float: left;
@@ -183,57 +241,107 @@ form {
                 clear: both;
             }
         }
-        a {
-            display: block;
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 20px;
-            border-radius: 5px;
+        .playlist, .track {
+            position: relative;
             margin-bottom: 30px;
+            border-radius: 5px;
             overflow: hidden;
+            background-image: url('../img/loading.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 25%;
+            background-color: #f2f2f2;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-            text-align: center;
-            .playlist {
-                background-image: url('../img/concert.jpg');
-                background-position: center;
-                background-size: cover;
-                background-repeat: no-repeat;
-                padding: 12px;
-                min-height: 200px;
-                position: relative;
-                .overlay {
-                    background: rgba(0, 0, 0, 0.75);
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    bottom: 0;
-                    right: 0;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
+        }
+        .details {
+            background-color: rgba(0, 0, 0, 0.75);
+            padding: 5px 10px;
+            border-radius: 2px;
+            h3, h4 {
+                overflow-wrap: break-word;
+                word-wrap: break-word;
+                word-break: break-word;
+                hyphens: auto;
+            }
+        }
+        a {
+            &.delete, &.info {
+                text-decoration: none;
+                position: absolute;
+                bottom: 10px;
+                border-radius: 2px;
+                background-color: rgba(0, 0, 0, 0.75);
+                padding: 1px 5px 2px 5px;
+                font-size: 10px;
+                font-weight: normal;
+            }
+            &.delete {
+                right: 30px;
+                &:hover {
+                    background-color: #ff4040;
+                }
+            }
+            &.info {
+                right: 10px;
+                &.selected {
+                    background-color: #76c000;
+                }
+                &:hover {
+                    background-color: #76c000;
                 }
             }
         }
     }
 }
 
-.tracks {
-    .columns {
-        &:last-of-type {
-            float: left;
-        }
-        @include breakpoint(medium) {
-            &:nth-of-type(3n+1) {
-                clear: both;
+.playlist {
+    .cover {
+        background-position: center;
+        background-size: cover;
+        height: 180px;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+}
+
+.track {
+    iframe {
+        margin-bottom: -6px;
+    }
+    .other {
+        height: 180px;
+        background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(255, 255, 255, 0.25)), url('../img/track.jpg');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 10px;
+        a {
+            &.play {
+                color: #ffffff;
+                text-decoration: none;
+                flex-shrink: 0;
+                background-color: #6e00fd;
+                border-radius: 100%;
+                &:hover {
+                    background-color: #6300e4;
+                }
+                span {
+                    width: 50px;
+                    height: 50px;
+                    font-size: 25px;
+                    padding-left: 5px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
             }
         }
-        .track {
-            background: #f6f6f6;
-            margin-bottom: 20px;
-            iframe {
-                margin-bottom: -10px;
-            }
+        .details {
+            margin-left: 10px;
         }
     }
 }

@@ -2,35 +2,41 @@ var express = require('express');
 var router = express.Router();
 var database = require('../modules/database');
 
-var createError = "";
+var createError = '';
+var edit = false;
 
 /* GET PLAYLISTS */
 router.get('/playlists', function(req, res, next) {
     var email = req.session.email;
     database(function(err, connection) {
-        if(err) {
+        if (err) {
             console.log("An error occurred. Unable to connect to the database.");
             throw err;
         }
-        connection.query('SELECT * FROM USERS WHERE email=?', [email], function(err, results, fields) {
-            if(err) {
+        connection.query('SELECT * FROM users WHERE email = ?', [email], function(err, results, fields) {
+            if (err) {
                 throw err;
             } else {
                 var userId = req.session.userId = results[0].id;
                 var firstName = results[0].firstName;
-                connection.query('SELECT * FROM PLAYLISTS WHERE userId=? ORDER BY id DESC', [userId], function(err, results, fields) {
+                var infoPlaylist = req.session.infoPlaylist;
+                connection.query('SELECT * FROM playlists WHERE userId = ? ORDER BY id DESC', [userId], function(err, results, fields) {
                     connection.release();
-                    if(err) {
+                    if (err) {
                         throw err;
                     } else {
+                        console.log(infoPlaylist);
                         res.render('playlists', {
                             title: 'Melodacious | playlists',
                             firstName: firstName,
                             playlists: results,
+                            infoPlaylist: infoPlaylist,
                             access: email,
+                            edit: edit,
                             createError: createError
                         });
-                        createError= "";
+                        edit = false;
+                        createError = '';
                     }
                 });
             }
@@ -43,53 +49,135 @@ router.post('/create-playlist', function(req, res, next) {
     var userId = req.session.userId;
     var playlistTitle = req.body.title.trim();
     var playlistDescription = req.body.description.trim();
-    var playlistImage = req.body.image;
+    var playlistCover = req.body.cover;
     database(function(err, connection) {
-        if(err) {
+        if (err) {
             console.log("An error occurred. Unable to connect to the database.");
             throw err;
         }
-        connection.query('SELECT * FROM PLAYLISTS WHERE title=? AND userId=?', [playlistTitle, userId], function(err, results, fields) {
-            if(err) {
+        connection.query('SELECT * FROM playlists WHERE title = ? AND userId = ?', [playlistTitle, userId], function(err, results, fields) {
+            if (err) {
                 throw err;
-            } else if ((results.length === 0)) {
-                connection.query('INSERT INTO PLAYLISTS (title, description, image, userId) VALUES(?, ?, ?, ?)', [playlistTitle, playlistDescription, playlistImage, userId], function(err, results, fields) {
+            } else if (results.length === 0) {
+                if (playlistCover === undefined) {
+                    playlistCover = '/img/playlist.jpg';
+                    console.log(playlistCover);
+                }
+                connection.query('INSERT INTO playlists (title, description, cover, userId) VALUES (?, ?, ?, ?)', [playlistTitle, playlistDescription, playlistCover, userId], function(err, results, fields) {
                     connection.release();
-                    if(err) {
+                    if (err) {
                         throw err;
-                    } else if ((playlistTitle !== "")) {
-                        res.redirect('/user/playlists');
                     } else {
-                        createError = 'An error occurred. Please try creating playlist again.';
                         res.redirect('/user/playlists');
                     }
                 });
             } else {
-                createError = 'Playlist already exists. Please try creating playlist again.';
+                createError = 'Playlist title already exists. Please try a different title.';
                 res.redirect('/user/playlists');
             }
         });
     });
 });
 
-/* GET PLAYLIST */
-router.get('/playlists/:id/:title', function(req, res, next) {
-    var email = req.session.email;
-    if(req.params.id) {
+/* EDIT PLAYLIST */
+router.get('/edit-playlist/:id', function(req, res, next) {
+    if (req.params.id) {
         database(function(err, connection) {
-            if(err) {
+            if (err) {
                 console.log("An error occurred. Unable to connect to the database.");
                 throw err;
             }
-            connection.query('SELECT * FROM PLAYLISTS WHERE id=?', [req.params.id], function(err, results, fields) {
-                if(err) {
+            connection.query('SELECT * FROM playlists WHERE id = ?', [req.params.id], function(err, results, fields) {
+                if (err) {
+                    throw err;
+                } else {
+                    req.session.infoPlaylist = results;
+                    edit = true;
+                    res.redirect('/user/playlists');
+                }
+            });
+        });
+    }
+});
+
+/* UPDATE PLAYLIST */
+router.post('/update-playlist', function(req, res, next) {
+    var userId = req.session.userId;
+    var playlistId = req.session.infoPlaylist[0].id;
+    var playlistTitle = req.body.title.trim();
+    var playlistDescription = req.body.description.trim();
+    var playlistCover = req.body.cover;
+    database(function(err, connection) {
+        if (err) {
+            console.log("An error occurred. Unable to connect to the database.");
+            throw err;
+        }
+        connection.query('SELECT * FROM playlists WHERE title = ? AND userId = ?', [playlistTitle, userId], function(err, results, fields) {
+            if (err) {
+                throw err;
+            } else if ((results.length === 0) || (results[0].id === playlistId)) {
+                if (playlistCover === undefined) {
+                    playlistCover = '/img/playlist.jpg';
+                    console.log(playlistCover);
+                }
+                connection.query('UPDATE playlists SET title = ?, description = ?, cover = ? WHERE id = ?', [playlistTitle, playlistDescription, playlistCover, playlistId], function(err, results, fields) {
+                    connection.release();
+                    if (err) {
+                        throw err;
+                    } else {
+                        res.redirect('/user/playlists');
+                    }
+                });
+            } else {
+                edit = true;
+                createError = 'Playlist title already exists. Please try a different title.';
+                res.redirect('/user/playlists');
+            }
+        });
+    });
+});
+
+/* DELETE PLAYLIST */
+router.get('/delete-playlist/:id', function(req, res, next) {
+    if (req.params.id) {
+        database(function(err, connection) {
+            if (err) {
+                console.log("An error occurred. Unable to connect to the database.");
+                throw err;
+            }
+            connection.query('DELETE FROM playlists WHERE id = ?', [req.params.id], function(err, results, fields) {
+                connection.release();
+                if (err) {
+                    throw err;
+                } else {
+                    res.redirect('/user/playlists');
+                }
+            });
+        });
+    }
+});
+
+/* GET TRACKS */
+router.get('/playlist/:id/:title', function(req, res, next) {
+    var email = req.session.email;
+    if (req.params.id) {
+        database(function(err, connection) {
+            if (err) {
+                console.log("An error occurred. Unable to connect to the database.");
+                throw err;
+            }
+            connection.query('SELECT * FROM playlists WHERE id = ?', [req.params.id], function(err, results, fields) {
+                if (err) {
                     throw err;
                 } else {
                     var playlistId = req.session.playlistId = results[0].id;
                     var playlistTitle = req.session.playlistTitle = results[0].title;
-                    var playlistDescription = results[0].description;
-                    connection.query('SELECT * FROM TRACKS WHERE playlistId=? ORDER BY dateAdded DESC', [playlistId], function(err, results, fields) {
-                        if(err) {
+                    var playlistDescription = req.session.playlistDescription = results[0].description;
+                    var playlistTracks = req.session.playlistTracks = results[0].tracks;
+                    var infoTrack = req.session.infoTrack;
+                    connection.query('SELECT * FROM tracks WHERE playlistId = ? ORDER BY dateAdded DESC', [playlistId], function(err, results, fields) {
+                        connection.release();
+                        if (err) {
                             throw err;
                         } else {
                             res.render('tracks', {
@@ -97,9 +185,13 @@ router.get('/playlists/:id/:title', function(req, res, next) {
                                 playlistTitle: playlistTitle,
                                 playlistDescription: playlistDescription,
                                 tracks: results,
+                                infoTrack: infoTrack,
                                 access: email,
-                                createError: createError,
+                                edit: edit,
+                                createError: createError
                             });
+                            edit = false;
+                            createError = '';
                         }
                     });
                 }
@@ -112,41 +204,108 @@ router.get('/playlists/:id/:title', function(req, res, next) {
 router.post('/create-track', function(req, res, next) {
     var playlistId = req.session.playlistId;
     var playlistTitle = req.session.playlistTitle;
+    var playlistTracks = req.session.playlistTracks;
     var trackTitle = req.body.title.trim();
     var trackArtist = req.body.artist.trim();
-    var trackAlbum = req.body.album.trim();
     var trackUrl = req.body.url.trim();
-    var trackService = req.body.service;
     database(function(err, connection) {
-        if(err) {
+        if (err) {
             console.log("An error occurred. Unable to connect to the database.");
             throw err;
         }
-        connection.query('SELECT * FROM PLAYLISTS WHERE id=? AND title=?', [playlistId, playlistTitle], function(err, results, fields) {
-            if(err) {
+        connection.query('SELECT * FROM tracks WHERE (title = ? AND playlistId = ?) OR (url = ? AND playlistId = ?) OR (title = ? AND url = ? AND playlistId = ?)', [trackTitle, playlistId, trackUrl, playlistId, trackTitle, trackUrl, playlistId], function(err, results, fields) {
+            if (err) {
                 throw err;
-            } else {
-                var playlistDescription = results[0].description;
-                connection.query('SELECT * FROM TRACKS WHERE title=? AND playlistId=?', [trackTitle, playlistId], function(err, results, fields) {
-                    if(err) {
+            } else if (results.length === 0) {
+                var trackService;
+                if (trackUrl.includes('https://soundcloud.com')) {
+                    trackService = 'soundcloud';
+                } else if (trackUrl.includes('https://www.mixcloud.com')) {
+                    trackService = 'mixcloud';
+                } else {
+                    trackService = null;
+                }
+                connection.query('INSERT INTO tracks (title, artist, url, service, playlistId) VALUES (?, ?, ?, ?, ?)', [trackTitle, trackArtist, trackUrl, trackService, playlistId], function(err, results, fields) {
+                    if (err) {
                         throw err;
-                    } else if ((results.length === 0)) {
-                        connection.query('INSERT INTO TRACKS (title, artist, album, url, service, playlistId) VALUES(?, ?, ?, ?, ?, ?)', [trackTitle, trackArtist, trackAlbum, trackUrl, trackService, playlistId], function(err, results, fields) {
+                    } else {
+                        connection.query('UPDATE playlists SET tracks = ? WHERE id = ?', [playlistTracks + 1, playlistId], function(err, results, fields) {
                             connection.release();
-                            if(err) {
+                            if (err) {
                                 throw err;
-                            } else if ((playlistTitle !== "")) {
-                                res.redirect('playlists/' + playlistId + '/' + playlistTitle);
                             } else {
-                                createError = 'An error occurred. Please try creating track again.';
-                                res.redirect('playlists/' + playlistId + '/' + playlistTitle);
+                                res.redirect('playlist/' + playlistId + '/' + playlistTitle);
                             }
                         });
-                    } else {
-                        createError = 'Track already exists. Please try creating track again.';
-                        res.redirect('playlists/' + playlistId + '/' + playlistTitle);
                     }
                 });
+            } else {
+                createError = 'Track title/url already exists. Please try using a different title/url.';
+                res.redirect('playlist/' + playlistId + '/' + playlistTitle);
+            }
+        });
+    });
+});
+
+/* EDIT TRACK */
+router.get('/edit-track/:id', function(req, res, next) {
+    var playlistId = req.session.playlistId;
+    var playlistTitle = req.session.playlistTitle;
+    if (req.params.id) {
+        database(function(err, connection) {
+            if (err) {
+                console.log("An error occurred. Unable to connect to the database.");
+                throw err;
+            }
+            connection.query('SELECT * FROM tracks WHERE id = ?', [req.params.id], function(err, results, fields) {
+                if (err) {
+                    throw err;
+                } else {
+                    req.session.infoTrack = results;
+                    edit = true;
+                    res.redirect('/user/playlist/' + playlistId + '/' + playlistTitle);
+                }
+            });
+        });
+    }
+});
+
+/* CREATE TRACK */
+router.post('/update-track', function(req, res, next) {
+    var playlistId = req.session.playlistId;
+    var playlistTitle = req.session.playlistTitle;
+    var trackId = req.session.infoTrack[0].id;
+    var trackTitle = req.body.title.trim();
+    var trackArtist = req.body.artist.trim();
+    var trackUrl = req.body.url.trim();
+    database(function(err, connection) {
+        if (err) {
+            console.log("An error occurred. Unable to connect to the database.");
+            throw err;
+        }
+        connection.query('SELECT * FROM tracks WHERE (title = ? AND playlistId = ?) OR (url = ? AND playlistId = ?) OR (title = ? AND url = ? AND playlistId = ?)', [trackTitle, playlistId, trackUrl, playlistId, trackTitle, trackUrl, playlistId], function(err, results, fields) {
+            if (err) {
+                throw err;
+            } else if ((results.length === 0) || (results[0].id === trackId)) {
+                var trackService;
+                if (trackUrl.includes('https://soundcloud.com')) {
+                    trackService = 'soundcloud';
+                } else if (trackUrl.includes('https://www.mixcloud.com')) {
+                    trackService = 'mixcloud';
+                } else {
+                    trackService = null;
+                }
+                connection.query('UPDATE playlists SET title = ?, artist = ?, url = ? WHERE id = ?', [trackTitle, trackArtist, trackUrl, playlistId], function(err, results, fields) {
+                    connection.release();
+                    if (err) {
+                        throw err;
+                    } else {
+                        res.redirect('playlist/' + playlistId + '/' + playlistTitle);
+                    }
+                });
+            } else {
+                createError = 'Track title/url already exists. Please try using a different title/url.';
+                res.redirect('playlist/' + playlistId + '/' + playlistTitle);
             }
         });
     });
@@ -156,17 +315,25 @@ router.post('/create-track', function(req, res, next) {
 router.get('/delete-track/:id', function(req, res, next) {
     var playlistId = req.session.playlistId;
     var playlistTitle = req.session.playlistTitle;
-    if(req.params.id) {
+    var playlistTracks = req.session.playlistTracks;
+    if (req.params.id) {
         database(function(err, connection) {
-            if(err) {
+            if (err) {
                 console.log("An error occurred. Unable to connect to the database.");
                 throw err;
             }
-            connection.query('DELETE FROM TRACKS WHERE id=? AND playlistId=?', [req.params.id, playlistId], function(err, results, fields) {
-                if(err) {
+            connection.query('DELETE FROM tracks WHERE id = ? AND playlistId = ?', [req.params.id, playlistId], function(err, results, fields) {
+                if (err) {
                     throw err;
                 } else {
-                    res.redirect('/user/playlists/' + playlistId + '/' + playlistTitle);
+                    connection.query('UPDATE playlists SET tracks = ? WHERE id = ?', [playlistTracks - 1, playlistId], function(err, results, fields) {
+                        connection.release();
+                        if (err) {
+                            throw err;
+                        } else {
+                            res.redirect('/user/playlist/' + playlistId + '/' + playlistTitle);
+                        }
+                    });
                 }
             });
         });

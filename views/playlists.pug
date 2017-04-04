@@ -5,29 +5,64 @@ block content
         section.hero
             div.row
                 div.small-12.medium-7.large-8.columns
-                    h1 Welcome #{firstName}
-                    p Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive innovation via workplace diversity and empowerment.
+                    h1 Welcome #{firstName}!
+                    h2  We hope you're having a great day.
+                    p All of the playlists you create will be listed below. If you don't see any playlists why not try creating a new one using the form provided!
                 div.small-12.medium-5.large-4.columns
-                    form(method='POST' action='/user/create-playlist').small-12.columns.create
-                        if createError !== ""
-                            label.error #{createError}
-                        else
-                            label Create a new playlist.
-                        input(type='text', placeholder='Title', name='title', required)
-                        textarea(type='text', placeholder='Description', name='description')
-                        span.flex
-                            select(name='image', required)
-                                option(value='' selected='true' disabled='true') -- Select Image --
-                                option(value='soundcloud') SoundCloud
-                                option(value='spotify') Spotify
-                                option(value='other') Other
-                            button(type='submit') Create
-                                span.fa.fa-plus-circle
+                    if edit
+                        form(method='POST' action='/user/update-playlist').small-12.columns.update
+                            if createError !== ''
+                                label.error #{createError}
+                            else
+                                label Update your selected playlist.
+                            input(type='text', placeholder='Title', name='title', maxlength='45', value= infoPlaylist[0].title, required)
+                            textarea(type='text', placeholder='Description', name='description', maxlength='100', value= infoPlaylist[0].description)
+                            span.flex
+                                select(name='cover')
+                                    option(value='' selected=infoPlaylist[0].cover === '/img/playlist.jpg', disabled='true') -- Playlist Cover --
+                                    option(value='/img/disco-ball.jpg', selected=infoPlaylist[0].cover === '/img/disco-ball.jpg') Disco Ball
+                                    option(value='/img/guitar.jpg', selected=infoPlaylist[0].cover === '/img/guitar.jpg') Guitar
+                                    option(value='/img/headphones.jpg', selected=infoPlaylist[0].cover === '/img/headphones.jpg') Headphones
+                                    option(value='/img/microphone.jpg', selected=infoPlaylist[0].cover === '/img/microphone.jpg') Microphone
+                                    option(value='/img/piano.jpg', selected=infoPlaylist[0].cover === '/img/piano.jpg') Piano
+                                    option(value='/img/turntable.jpg', selected=infoPlaylist[0].cover === '/img/turntable.jpg') Turntable
+                                button(type='submit') Update
+                    else
+                        form(method='POST' action='/user/create-playlist').small-12.columns.create
+                            if createError !== ''
+                                label.error #{createError}
+                            else
+                                label Create a new playlist.
+                            input(type='text', placeholder='Title', name='title', maxlength='45', required)
+                            textarea(type='text', placeholder='Description', name='description', maxlength='100')
+                            span.flex
+                                select(name='cover')
+                                    option(value='' selected='true' disabled='true') -- Playlist Cover --
+                                    option(value='/img/disco-ball.jpg') Disco Ball
+                                    option(value='/img/guitar.jpg') Guitar
+                                    option(value='/img/headphones.jpg') Headphones
+                                    option(value='/img/microphone.jpg') Microphone
+                                    option(value='/img/piano.jpg') Piano
+                                    option(value='/img/turntable.jpg') Turntable
+                                button(type='submit') Create
+                                    span.fa.fa-plus-circle
         section.playlists
             div.row
                 each playlist in playlists
                     div.small-12.medium-4.large-3.columns
-                        a(href='/user/playlists/' + playlist.id + '/' + playlist.title) 
-                            div.playlist
-                                div.overlay
-                                    span #{playlist.title}
+                        div.playlist
+                            div(style='background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(255, 255, 255, 0.25)), url(..' + playlist.cover + ');').cover
+                                div.details
+                                    a(href='/user/playlist/' + playlist.id + '/' + playlist.title)
+                                        h3 #{playlist.title}
+                                    if playlist.tracks !== 1  
+                                        h4 #{playlist.tracks} Tracks
+                                    else 
+                                        h4 #{playlist.tracks} Track
+                            a(href='/user/delete-playlist/' + playlist.id).delete Delete
+                            if edit && playlist.id === infoPlaylist[0].id 
+                                a(href='/user/edit-playlist/' + playlist.id).info.selected
+                                    span.fa.fa-info
+                            else
+                                a(href='/user/edit-playlist/' + playlist.id).info
+                                    span.fa.fa-info

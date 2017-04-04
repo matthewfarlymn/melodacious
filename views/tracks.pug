@@ -6,39 +6,59 @@ block content
             div.row
                 div.small-12.medium-7.large-8.columns
                     h1 #{playlistTitle}
-                    p #{playlistDescription}
+                    if playlistDescription !== '' 
+                        h2 #{playlistDescription}
+                    else
+                        h2 Why not enter a description for your playlist?
+                    p All of the tracks you create will be listed below. If you don't see any tracks why not try creating a new one using the form provided!
                 div.small-12.medium-5.large-4.columns
-                    form(method='POST' action='/user/create-track').small-12.columns.create
-                        if createError !== ""
-                            label.error #{createError}
-                        else
-                            label Add a new track.
-                        input(type='text', placeholder='Title', name='title', required)
-                        input(type='text', placeholder='Artist', name='artist')
-                        input(type='text', placeholder='Album', name='album')
-                        input(type='url', placeholder='Url', name='url', required)
-                        span.flex    
-                            select(name='service', required)
-                                option(value='' selected='true' disabled='true') -- Select Service --
-                                option(value='soundcloud') SoundCloud
-                                option(value='spotify') Spotify
-                                option(value='other') Other
-                            button(type='submit') Create
-                                span.fa.fa-plus-circle
+                    if edit
+                        form(method='POST' action='/user/update-track').small-12.columns.update
+                            if createError !== ''
+                                label.error #{createError}
+                            else
+                                label Add a new track.
+                            input(type='text', placeholder='Title', name='title', maxlength='100', value=infoTrack[0].title required)
+                            input(type='text', placeholder='Artist', name='artist', maxlength='100', value=infoTrack[0].artist)
+                            span.flex    
+                                input(type='url', placeholder='Url', name='url', maxlength='255', value=infoTrack[0].url, required)
+                                button(type='submit') Update
+                    else
+                        form(method='POST' action='/user/create-track').small-12.columns.create
+                            if createError !== ''
+                                label.error #{createError}
+                            else
+                                label Add a new track.
+                            input(type='text', placeholder='Title', name='title', maxlength='100', required)
+                            input(type='text', placeholder='Artist', name='artist', maxlength='100',)
+                            span.flex    
+                                input(type='url', placeholder='Url', name='url', maxlength='255', required)
+                                button(type='submit') Create
+                                    span.fa.fa-plus-circle
         section.tracks
             div.row
                 each track in tracks
                     div.small-12.medium-4.large-3.columns 
                         div.track
-                            p #{track.title}
-                            if track.arist
-                                p #{track.artist}
-                            if track.album
-                                p #{track.album}
                             if track.service === 'soundcloud'
-                                iframe(src='https://w.soundcloud.com/player/?url=' + track.url width='100%' height='115' scrolling='no' frameborder='no')
-                            else if track.service === 'spotify'
-                                iframe(src='https://embed.spotify.com/?uri=' + track.url width='100%' height='80' frameborder='0' allowtransparency='true')
+                                iframe(src='https://w.soundcloud.com/player/?url=' + track.url + '&auto_play=false&buying=false&liking=false&download=false&sharing=false&show_artwork=false&show_comments=false&show_playcount=false&hide_related=false&visual=true&start_track=0&callback=true' width='100%' height='180' scrolling='no' frameborder='no')
+                            else if track.service === 'mixcloud'
+                                iframe(src='https://www.mixcloud.com/widget/iframe/?feed='+ track.url width='100%' height='180' frameborder='0')
                             else
-                                a(href=track.url)
-                            a(href='/user/delete-track/' + track.id) Delete
+                                div.other
+                                    a(href=track.url target='_blank').play
+                                        span.fa.fa-play
+                                    div.details
+                                        a(href=track.url target='_blank')
+                                            h3 
+                                                span #{track.title}
+                                        if track.artist
+                                            h4 
+                                                span #{track.artist}
+                            a(href='/user/delete-track/' + track.id).delete Delete
+                            if edit && track.id === infoTrack[0].id
+                                a(href='/user/edit-track/' + track.id).info.selected
+                                    span.fa.fa-info
+                            else
+                                a(href='/user/edit-track/' + track.id).info
+                                    span.fa.fa-info

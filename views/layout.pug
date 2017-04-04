@@ -3,6 +3,7 @@ html
     head
         title= title
         link(rel='stylesheet', href='/css/app.css')
+        link(rel='icon', href='/img/favicon.ico')
         script(type='text/javascript', src='/js/vendor.min.js')
         script(type='text/javascript', src='/js/app.min.js')
     body
@@ -16,7 +17,10 @@ html
                             ul
                                 if access
                                     li
-                                        a(class='sign-out' href='/sign-out') Sign-out
+                                        a(href='/') My Playlists
+                                    li |
+                                    li
+                                        a(href='/sign-out').sign-out Sign-out
         block content
         block footer
             footer

@@ -5,21 +5,44 @@ block content
         section
             div.row
                 div.small-12.medium-7.large-8.columns.error404
-                    h1 #{error.status} #{message}
-                    p Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive innovation via workplace diversity and empowerment.
-                if !access
+                    h1 #{error.status}: #{message}
+                    h2 Ooops! We can't seem to find the page you were looking for!
+                    p The best thing to do now would be to check the url for errors, start again from 
+                        a(href='/') home
+                        if access
+                            span , or try creating a new playlist while you're here! Either way it's up to you.
+                        else
+                            span , or sign-in/register while you're here! Either way it's up to you.
+                if access
+                    div.small-12.medium-5.large-4.columns
+                        form(method='POST' action='/user/create-playlist').small-12.columns.create
+                            label Create a new playlist.
+                            input(type='text', placeholder='Title', name='title', maxlength='45', required)
+                            textarea(type='text', placeholder='Description', name='description', maxlength='100')
+                            span.flex
+                                select(name='cover')
+                                    option(value='/img/playlist.jpg' selected='true' disabled='true') -- Playlist Cover --
+                                    option(value='/img/disco-ball.jpg') Disco Ball
+                                    option(value='/img/guitar.jpg') Guitar
+                                    option(value='/img/headphones.jpg') Headphones
+                                    option(value='/img/microphone.jpg') Microphone
+                                    option(value='/img/piano.jpg') Piano
+                                    option(value='/img/turntable.jpg') Turntable
+                                button(type='submit') Create
+                                    span.fa.fa-plus-circle
+                else
                     div.small-12.medium-5.large-4.columns
                         form(method='POST' action='/sign-in').small-12.columns.sign-in
+                            label Sign-in and start creating!
                             input(type='email', placeholder='Email', name='email')
                             span.flex
                                 input(type='password', placeholder='********', name='password')
                                 button(type='submit') Sign-in
                         form(method='POST' action='/register').small-12.columns.register
-                            label New to Melodacious? 
-                                span.register Register now
-                            input(type='text', placeholder='First Name', name='firstname')
-                            input(type='text', placeholder='Last Name', name='lastname')
-                            input(type='email', placeholder='Email', name='email')
+                            label New to Melodacious? Register now.
+                            input(type='text', placeholder='First Name', name='firstName', maxlength='45', required)
+                            input(type='text', placeholder='Last Name', name='lastName', maxlength='45', required)
+                            input(type='email', placeholder='Email', name='email', maxlength='100', required)
                             span.flex
-                                input(type='password', placeholder='********', name='password')
+                                input(type='password', placeholder='********', name='password', maxlength='255', required)
                                 button(type='submit') Register

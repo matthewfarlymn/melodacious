@@ -2,8 +2,8 @@ var express = require('express');
 var router = express.Router();
 var database = require('../modules/database');
 
-var signInError = "";
-var registrationError = "";
+var signInError = '';
+var registrationError = '';
 
 /* INDEX */
 router.get('/', function(req, res, next) {
@@ -13,8 +13,8 @@ router.get('/', function(req, res, next) {
             signInError: signInError,
             registrationError: registrationError
         });
-        signInError = "";
-        registrationError = "";
+        signInError = '';
+        registrationError = '';
     } else {
         res.redirect('/user/playlists');
     }
@@ -31,21 +31,20 @@ router.post('/sign-in', function(req, res, next) {
     var email = req.body.email.trim();
     var password = req.body.password;
     database(function(err, connection) {
-        if(err) {
+        if (err) {
             console.log("An error occurred. Unable to connect to the database.");
             throw err;
         }
-        connection.query('SELECT * FROM USERS WHERE email=?', [email], function(err, results, fields) {
+        connection.query('SELECT * FROM users WHERE email = ?', [email], function(err, results, fields) {
             connection.release();
-            if(err) {
+            if (err) {
                 throw err;
             } else if ((results.length !== 0) && (password === results[0].password)) {
                 req.session.email = results[0].email;
                 req.session.userId = results[0].id;
-                console.log(req.session.email);
                 res.redirect('/user/playlists');
             } else {
-                signInError = 'Incorrect email/password entered';
+                signInError = 'Incorrect email/password entered. Please try signing-in again.';
                 res.redirect('/');
             }
         });
@@ -59,19 +58,19 @@ router.post('/register', function(req, res, next) {
     var email = req.body.email.trim();
     var password = req.body.password;
     database(function(err, connection) {
-        if(err) {
+        if (err) {
             console.log("An error occurred. Unable to connect to the database.");
             throw err;
         }
-        connection.query('SELECT * FROM USERS WHERE email=?', [email], function(err, results, fields) {
-            if(err) {
+        connection.query('SELECT * FROM users WHERE email = ?', [email], function(err, results, fields) {
+            if (err) {
                 throw err;
-            } else if ((results.length === 0)) {
-                connection.query('INSERT INTO USERS (firstName, lastName, email, password) VALUES(?, ?, ?, ?)', [firstName, lastName, email, password], function(err, results, fields) {
+            } else if (results.length === 0) {
+                connection.query('INSERT INTO users (firstName, lastName, email, password) VALUES (?, ?, ?, ?)', [firstName, lastName, email, password], function(err, results, fields) {
                     connection.release();
-                    if(err) {
+                    if (err) {
                         throw err;
-                    } else if ((firstName !== "") && (lastName !== "") && (email !== "") && (password !== "")) {
+                    } else if ((firstName !== '') && (lastName !== '') && (email !== '') && (password !== '')) {
                         req.session.email = email;
                         res.redirect('/user/playlists');
                     } else {
@@ -80,7 +79,7 @@ router.post('/register', function(req, res, next) {
                     }
                 });
             } else {
-                registrationError = 'User already exists. Please try registering again.';
+                registrationError = 'User email already exists. Please register using a different email or try signing-in.';
                 res.redirect('/');
             }
         });
