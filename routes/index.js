@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var database = require('../modules/database');
+var connect = require('../database/connect');
 
 var signInError = '';
 var registrationError = '';
@@ -30,7 +30,7 @@ router.get('/sign-out', function(req, res, next) {
 router.post('/sign-in', function(req, res, next) {
     var email = req.body.email.trim();
     var password = req.body.password;
-    database(function(err, connection) {
+    connect(function(err, connection) {
         if (err) {
             console.log("An error occurred. Unable to connect to the database.");
             throw err;
@@ -57,7 +57,7 @@ router.post('/register', function(req, res, next) {
     var lastName = req.body.lastName.trim();
     var email = req.body.email.trim();
     var password = req.body.password;
-    database(function(err, connection) {
+    connect(function(err, connection) {
         if (err) {
             console.log("An error occurred. Unable to connect to the database.");
             throw err;

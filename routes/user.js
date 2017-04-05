@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var database = require('../modules/database');
+var connect = require('../database/connect');
 
 var createError = '';
 var edit = false;
@@ -8,7 +8,7 @@ var edit = false;
 /* GET PLAYLISTS */
 router.get('/playlists', function(req, res, next) {
     var email = req.session.email;
-    database(function(err, connection) {
+    connect(function(err, connection) {
         if (err) {
             console.log("An error occurred. Unable to connect to the database.");
             throw err;
@@ -50,7 +50,7 @@ router.post('/create-playlist', function(req, res, next) {
     var playlistTitle = req.body.title.trim();
     var playlistDescription = req.body.description.trim();
     var playlistCover = req.body.cover;
-    database(function(err, connection) {
+    connect(function(err, connection) {
         if (err) {
             console.log("An error occurred. Unable to connect to the database.");
             throw err;
@@ -59,7 +59,7 @@ router.post('/create-playlist', function(req, res, next) {
             if (err) {
                 throw err;
             } else if (results.length === 0) {
-                if (playlistCover === undefined) {
+                if (playlistCover === undefined) {connect
                     playlistCover = '/img/playlist.jpg';
                     console.log(playlistCover);
                 }
@@ -82,7 +82,7 @@ router.post('/create-playlist', function(req, res, next) {
 /* EDIT PLAYLIST */
 router.get('/edit-playlist/:id', function(req, res, next) {
     if (req.params.id) {
-        database(function(err, connection) {
+        connect(function(err, connection) {
             if (err) {
                 console.log("An error occurred. Unable to connect to the database.");
                 throw err;
@@ -107,7 +107,7 @@ router.post('/update-playlist', function(req, res, next) {
     var playlistTitle = req.body.title.trim();
     var playlistDescription = req.body.description.trim();
     var playlistCover = req.body.cover;
-    database(function(err, connection) {
+    connect(function(err, connection) {
         if (err) {
             console.log("An error occurred. Unable to connect to the database.");
             throw err;
@@ -140,7 +140,7 @@ router.post('/update-playlist', function(req, res, next) {
 /* DELETE PLAYLIST */
 router.get('/delete-playlist/:id', function(req, res, next) {
     if (req.params.id) {
-        database(function(err, connection) {
+        connect(function(err, connection) {
             if (err) {
                 console.log("An error occurred. Unable to connect to the database.");
                 throw err;
@@ -161,7 +161,7 @@ router.get('/delete-playlist/:id', function(req, res, next) {
 router.get('/playlist/:id/:title', function(req, res, next) {
     var email = req.session.email;
     if (req.params.id) {
-        database(function(err, connection) {
+        connect(function(err, connection) {
             if (err) {
                 console.log("An error occurred. Unable to connect to the database.");
                 throw err;
@@ -208,7 +208,7 @@ router.post('/create-track', function(req, res, next) {
     var trackTitle = req.body.title.trim();
     var trackArtist = req.body.artist.trim();
     var trackUrl = req.body.url.trim();
-    database(function(err, connection) {
+    connect(function(err, connection) {
         if (err) {
             console.log("An error occurred. Unable to connect to the database.");
             throw err;
@@ -252,7 +252,7 @@ router.get('/edit-track/:id', function(req, res, next) {
     var playlistId = req.session.playlistId;
     var playlistTitle = req.session.playlistTitle;
     if (req.params.id) {
-        database(function(err, connection) {
+        connect(function(err, connection) {
             if (err) {
                 console.log("An error occurred. Unable to connect to the database.");
                 throw err;
@@ -278,7 +278,7 @@ router.post('/update-track', function(req, res, next) {
     var trackTitle = req.body.title.trim();
     var trackArtist = req.body.artist.trim();
     var trackUrl = req.body.url.trim();
-    database(function(err, connection) {
+    connect(function(err, connection) {
         if (err) {
             console.log("An error occurred. Unable to connect to the database.");
             throw err;
@@ -317,7 +317,7 @@ router.get('/delete-track/:id', function(req, res, next) {
     var playlistTitle = req.session.playlistTitle;
     var playlistTracks = req.session.playlistTracks;
     if (req.params.id) {
-        database(function(err, connection) {
+        connect(function(err, connection) {
             if (err) {
                 console.log("An error occurred. Unable to connect to the database.");
                 throw err;
