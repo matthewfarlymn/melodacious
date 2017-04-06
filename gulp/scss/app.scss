@@ -89,7 +89,7 @@ header, footer {
                         text-decoration: none;
                         &.sign-out {
                             background-color: #6e00fd;
-                            padding: 10px 20px;
+                            padding: 8px 20px;
                             border-radius: 5px;
                             &:hover {
                                 background-color: #6300e4;
@@ -167,6 +167,7 @@ form {
         border-radius: 5px;
         border: 1px solid #cccccc;
         background-color: #ffffff;
+        height: 40px;
     }
     input[type='text'], input[type='email'], textarea, input[type='url'] {
         display: block;
@@ -187,6 +188,7 @@ form {
         display: flex;
         cursor: pointer;
         transition: all 0.25s ease-in-out;
+        max-height: 40px;
         span {
             margin-left: 5px;
         }
