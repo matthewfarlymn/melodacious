@@ -136,6 +136,9 @@ section {
     }
     &:last-of-type {
         padding-bottom: 108px;
+        &.playlists, &.tracks {
+            padding-bottom: 78px;
+        }
     }
     &.hero {
         background-color: #f6f6f6;
