@@ -8,8 +8,6 @@ var host = {
     database : process.env.APPSETTING_DB_NAME
 };
 
-console.log(process.env.APPSETTING_DB_HOST + ', ' + process.env.APPSETTING_DB_USER + ', ' + process.env.APPSETTING_DB_PASSWORD + ', ' + process.env.APPSETTING_DB_NAME);
-
 var pool = mysql.createPool(host);
 
 var connection = function(callback) {
