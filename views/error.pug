@@ -17,8 +17,8 @@ block content
                     div.small-12.medium-5.large-4.columns
                         form(method='POST' action='/user/create-playlist').small-12.columns.create
                             label Create a new playlist.
-                            input(type='text', placeholder='Title', name='title', maxlength='45', required)
-                            textarea(type='text', placeholder='Description', name='description', maxlength='100')
+                            input(type='text' placeholder='Title' name='title' maxlength='45' required)
+                            textarea(type='text' placeholder='Description' name='description' maxlength='100')
                             span.flex
                                 select(name='cover')
                                     option(value='/img/playlist.jpg' selected='true' disabled='true') -- Playlist Cover --
@@ -34,15 +34,15 @@ block content
                     div.small-12.medium-5.large-4.columns
                         form(method='POST' action='/sign-in').small-12.columns.sign-in
                             label Sign-in and start creating!
-                            input(type='email', placeholder='Email', name='email')
+                            input(type='email' placeholder='Email' name='email')
                             span.flex
-                                input(type='password', placeholder='********', name='password')
+                                input(type='password' placeholder='********' name='password')
                                 button(type='submit') Sign-in
                         form(method='POST' action='/register').small-12.columns.register
                             label New to Melodacious? Register now.
-                            input(type='text', placeholder='First Name', name='firstName', maxlength='45', required)
-                            input(type='text', placeholder='Last Name', name='lastName', maxlength='45', required)
-                            input(type='email', placeholder='Email', name='email', maxlength='100', required)
+                            input(type='text' placeholder='First Name' name='firstName' maxlength='45' required)
+                            input(type='text' placeholder='Last Name' name='lastName' maxlength='45' required)
+                            input(type='email' placeholder='Email' name='email' maxlength='100' required)
                             span.flex
-                                input(type='password', placeholder='********', name='password', maxlength='255', required)
+                                input(type='password' placeholder='********' name='password' maxlength='255' required)
                                 button(type='submit') Register

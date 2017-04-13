@@ -14,18 +14,18 @@ block content
                             label.error #{signInError}
                         else
                             label Sign-in and start creating!
-                        input(type='email', placeholder='Email', name='email', maxlength='100', required)
+                        input(type='email' placeholder='Email' name='email' maxlength='100' required)
                         span.flex
-                            input(type='password', placeholder='********', name='password', maxlength='255', required)
+                            input(type='password' placeholder='********' name='password' maxlength='255' required)
                             button(type='submit') Sign-in
                     form(method='POST' action='/register').small-12.columns.register
                         if registrationError !== ''
                             label.error #{registrationError}
                         else
                             label New to Melodacious? Register now.
-                        input(type='text', placeholder='First Name', name='firstName', maxlength='45', required)
-                        input(type='text', placeholder='Last Name', name='lastName', maxlength='45', required)
-                        input(type='email', placeholder='Email', name='email', maxlength='100', required)
+                        input(type='text' placeholder='First Name' name='firstName' maxlength='45' required)
+                        input(type='text' placeholder='Last Name' name='lastName' maxlength='45' required)
+                        input(type='email' placeholder='Email' name='email' maxlength='100' required)
                         span.flex
-                            input(type='password', placeholder='********', name='password', maxlength='255', required)
+                            input(type='password' placeholder='********' name='password' maxlength='255' required)
                             button(type='submit') Register

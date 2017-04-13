@@ -303,7 +303,7 @@ router.post('/update-track', function(req, res, next) {
                     } else {
                         trackService = null;
                     }
-                    connection.query('UPDATE playlists SET title = ?, artist = ?, url = ? WHERE id = ?', [trackTitle, trackArtist, trackUrl, playlistId], function(err, results, fields) {
+                    connection.query('UPDATE tracks SET title = ?, artist = ?, url = ?, service = ? WHERE id = ?', [trackTitle, trackArtist, trackUrl, trackService, playlistId], function(err, results, fields) {
                         connection.release();
                         if (err) {
                             throw err;
@@ -312,6 +312,7 @@ router.post('/update-track', function(req, res, next) {
                         }
                     });
                 } else {
+                    edit = true;
                     createError = 'Track title/url already exists. Please try using a different title/url.';
                     res.redirect('playlist/' + playlistId + '/' + playlistTitle);
                 }

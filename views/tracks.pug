@@ -18,10 +18,10 @@ block content
                                 label.error #{createError}
                             else
                                 label Add a new track.
-                            input(type='text', placeholder='Title', name='title', maxlength='100', value=infoTrack[0].title required)
-                            input(type='text', placeholder='Artist', name='artist', maxlength='100', value=infoTrack[0].artist)
+                            input(type='text' placeholder='Title' name='title' maxlength='100' value=infoTrack[0].title required)
+                            input(type='text' placeholder='Artist' name='artist' maxlength='100' value=infoTrack[0].artist)
                             span.flex    
-                                input(type='url', placeholder='Url', name='url', maxlength='255', value=infoTrack[0].url, required)
+                                input(type='url' placeholder='Url' name='url' maxlength='255' value=infoTrack[0].url, required)
                                 button(type='submit') Update
                     else
                         form(method='POST' action='/user/create-track').small-12.columns.create
@@ -29,10 +29,10 @@ block content
                                 label.error #{createError}
                             else
                                 label Add a new track.
-                            input(type='text', placeholder='Title', name='title', maxlength='100', required)
-                            input(type='text', placeholder='Artist', name='artist', maxlength='100',)
+                            input(type='text' placeholder='Title' name='title' maxlength='100' required)
+                            input(type='text' placeholder='Artist' name='artist' maxlength='100')
                             span.flex    
-                                input(type='url', placeholder='Url', name='url', maxlength='255', required)
+                                input(type='url' placeholder='Url' name='url' maxlength='255' required)
                                 button(type='submit') Create
                                     span.fa.fa-plus-circle
         section.tracks

@@ -15,17 +15,17 @@ block content
                                 label.error #{createError}
                             else
                                 label Update your selected playlist.
-                            input(type='text', placeholder='Title', name='title', maxlength='45', value= infoPlaylist[0].title, required)
-                            textarea(type='text', placeholder='Description', name='description', maxlength='100', value= infoPlaylist[0].description)
+                            input(type='text' placeholder='Title' name='title' maxlength='45' value= infoPlaylist[0].title, required)
+                            textarea(type='text' placeholder='Description' name='description' maxlength='100' value= infoPlaylist[0].description)
                             span.flex
                                 select(name='cover')
-                                    option(value='' selected=infoPlaylist[0].cover === '/img/playlist.jpg', disabled='true') -- Playlist Cover --
-                                    option(value='/img/disco-ball.jpg', selected=infoPlaylist[0].cover === '/img/disco-ball.jpg') Disco Ball
-                                    option(value='/img/guitar.jpg', selected=infoPlaylist[0].cover === '/img/guitar.jpg') Guitar
-                                    option(value='/img/headphones.jpg', selected=infoPlaylist[0].cover === '/img/headphones.jpg') Headphones
-                                    option(value='/img/microphone.jpg', selected=infoPlaylist[0].cover === '/img/microphone.jpg') Microphone
-                                    option(value='/img/piano.jpg', selected=infoPlaylist[0].cover === '/img/piano.jpg') Piano
-                                    option(value='/img/turntable.jpg', selected=infoPlaylist[0].cover === '/img/turntable.jpg') Turntable
+                                    option(value='' selected=infoPlaylist[0].cover === '/img/playlist.jpg' disabled='true') -- Playlist Cover --
+                                    option(value='/img/disco-ball.jpg' selected=infoPlaylist[0].cover === '/img/disco-ball.jpg') Disco Ball
+                                    option(value='/img/guitar.jpg' selected=infoPlaylist[0].cover === '/img/guitar.jpg') Guitar
+                                    option(value='/img/headphones.jpg' selected=infoPlaylist[0].cover === '/img/headphones.jpg') Headphones
+                                    option(value='/img/microphone.jpg' selected=infoPlaylist[0].cover === '/img/microphone.jpg') Microphone
+                                    option(value='/img/piano.jpg' selected=infoPlaylist[0].cover === '/img/piano.jpg') Piano
+                                    option(value='/img/turntable.jpg' selected=infoPlaylist[0].cover === '/img/turntable.jpg') Turntable
                                 button(type='submit') Update
                     else
                         form(method='POST' action='/user/create-playlist').small-12.columns.create
@@ -33,8 +33,8 @@ block content
                                 label.error #{createError}
                             else
                                 label Create a new playlist.
-                            input(type='text', placeholder='Title', name='title', maxlength='45', required)
-                            textarea(type='text', placeholder='Description', name='description', maxlength='100')
+                            input(type='text' placeholder='Title' name='title' maxlength='45' required)
+                            textarea(type='text' placeholder='Description' name='description' maxlength='100')
                             span.flex
                                 select(name='cover')
                                     option(value='' selected='true' disabled='true') -- Playlist Cover --
