@@ -145,7 +145,7 @@ router.post('/update-playlist', function(req, res, next) {
                 if (err) {
                     throw err;
                 // Verifying if query reults is zero or first object id matches playlist id
-                } else if (results.length === 0) {
+            } else if ((results.length === 0) || (results[0].id === playlistId)) {
                     // Verifies if playlist cover image is not set
                     if (playlistCover === undefined) {
                         // Sets playlist cover image address
@@ -268,7 +268,7 @@ router.post('/create-track', function(req, res, next) {
             throw err;
         } else {
             // Selecting al tracks where title and playlist id or url and playlist id or title, url and playlists match
-            connection.query('SELECT * FROM tracks WHERE (title = ? AND playlistId = ?) OR (url = ? AND playlistId = ?) OR (title = ? AND url = ? AND playlistId = ?)', [trackTitle, playlistId, trackUrl, playlistId, trackTitle, trackUrl, playlistId], function(err, results, fields) {
+            connection.query('SELECT * FROM tracks WHERE url = ? AND playlistId = ?', [trackUrl, playlistId], function(err, results, fields) {
                 if (err) {
                     throw err;
                 // Verifying if the query results are zero
@@ -302,7 +302,7 @@ router.post('/create-track', function(req, res, next) {
                     });
                 } else {
                     // Saving error message
-                    createError = 'Track title/url already exists. Please try using a different title/url.';
+                    createError = 'Track url already exists. Please try using a different url.';
                     // User is redirected specific playlist
                     res.redirect('playlist/' + playlistId + '/' + playlistTitle);
                 }
@@ -358,11 +358,11 @@ router.post('/update-track', function(req, res, next) {
             throw err;
         } else {
             // Selecting all tracks from database where title and playlist id or url and playlist id or title and url and playlist id match
-            connection.query('SELECT * FROM tracks WHERE (title = ? AND playlistId = ?) OR (url = ? AND playlistId = ?) OR (title = ? AND url = ? AND playlistId = ?)', [trackTitle, playlistId, trackUrl, playlistId, trackTitle, trackUrl, playlistId], function(err, results, fields) {
+            connection.query('SELECT * FROM tracks WHERE url = ? AND playlistId = ?', [trackUrl, playlistId], function(err, results, fields) {
                 if (err) {
                     throw err;
                 // Verifying if query reults returns zero
-                } else if (results.length === 0) {
+                } else if ((results.length === 0) || (results[0].id === trackId)) {
                     // Declaring trackService variable
                     var trackService;
                     // Verifying what trackUrl contains and sets trackServcie based on constraints
@@ -387,7 +387,7 @@ router.post('/update-track', function(req, res, next) {
                     // Edit is reset to true
                     edit = true;
                     // Saving error message
-                    createError = 'Track title/url already exists. Please try using a different title/url.';
+                    createError = 'Track url already exists. Please try using a different url.';
                     // User is redirected to specific playlist
                     res.redirect('playlist/' + playlistId + '/' + playlistTitle);
                 }
