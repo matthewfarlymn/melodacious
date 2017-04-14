@@ -145,7 +145,7 @@ router.post('/update-playlist', function(req, res, next) {
                 if (err) {
                     throw err;
                 // Verifying if query reults is zero or first object id matches playlist id
-                } else if ((results.length === 0) || (results[0].id === playlistId)) {
+                } else if (results.length === 0) {
                     // Verifies if playlist cover image is not set
                     if (playlistCover === undefined) {
                         // Sets playlist cover image address
@@ -361,8 +361,8 @@ router.post('/update-track', function(req, res, next) {
             connection.query('SELECT * FROM tracks WHERE (title = ? AND playlistId = ?) OR (url = ? AND playlistId = ?) OR (title = ? AND url = ? AND playlistId = ?)', [trackTitle, playlistId, trackUrl, playlistId, trackTitle, trackUrl, playlistId], function(err, results, fields) {
                 if (err) {
                     throw err;
-                // Verifying if query reults returns zero or first object if equals track id
-                } else if ((results.length === 0) || (results[0].id === trackId)) {
+                // Verifying if query reults returns zero
+                } else if (results.length === 0) {
                     // Declaring trackService variable
                     var trackService;
                     // Verifying what trackUrl contains and sets trackServcie based on constraints
