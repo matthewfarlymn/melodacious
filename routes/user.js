@@ -303,7 +303,8 @@ router.post('/update-track', function(req, res, next) {
                     } else {
                         trackService = null;
                     }
-                    connection.query('UPDATE tracks SET title = ?, artist = ?, url = ?, service = ? WHERE id = ?', [trackTitle, trackArtist, trackUrl, trackService, playlistId], function(err, results, fields) {
+                    console.log(trackService);
+                    connection.query('UPDATE tracks SET title = ?, artist = ?, url = ?, service = ? WHERE id = ?', [trackTitle, trackArtist, trackUrl, trackService, trackId], function(err, results, fields) {
                         connection.release();
                         if (err) {
                             throw err;

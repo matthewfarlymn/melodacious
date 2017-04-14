@@ -16,7 +16,7 @@ block content
                             else
                                 label Update your selected playlist.
                             input(type='text' placeholder='Title' name='title' maxlength='45' value= infoPlaylist[0].title, required)
-                            textarea(type='text' placeholder='Description' name='description' maxlength='100' value= infoPlaylist[0].description)
+                            textarea(type='text' placeholder='Description' name='description' maxlength='100') #{infoPlaylist[0].description}
                             span.flex
                                 select(name='cover')
                                     option(value='' selected=infoPlaylist[0].cover === '/img/playlist.jpg' disabled='true') -- Playlist Cover --
