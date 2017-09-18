@@ -2,10 +2,10 @@ var mysql = require('mysql');
 require('dotenv').config();
 
 var host = {
-    host : process.env.APPSETTING_DB_HOST,
-    user : process.env.APPSETTING_DB_USER,
-    password : process.env.APPSETTING_DB_PASSWORD,
-    database : process.env.APPSETTING_DB_NAME
+    host : process.env.DB_HOST,
+    user : process.env.DB_USER,
+    password : process.env.DB_PASSWORD,
+    database : process.env.DB_NAME
 };
 
 var pool = mysql.createPool(host);
